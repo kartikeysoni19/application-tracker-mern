@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import JobCard from '../components/JobCard';
 import JobModal from '../components/JobModal';
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [editingJob, setEditingJob] = useState(null);
 
   // Fetch jobs and stats
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const [jobsRes, statsRes] = await Promise.all([
@@ -37,11 +37,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, statusFilter]);
 
   useEffect(() => {
     fetchData();
-  }, [search, statusFilter]);
+  }, [fetchData]);
 
   // Handle job creation
   const handleAddJob = () => {
